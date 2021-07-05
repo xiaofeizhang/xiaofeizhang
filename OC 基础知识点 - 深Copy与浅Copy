@@ -1,5 +1,28 @@
 深Copy与浅Copy
+
+你真的了解深Copy，浅Copy吗？
+很多开发者都认为深Copy就是指针和内存都重新生成一份，而浅Copy是只重新生成一个指针指向原来的内存地址。
+真的就这些，没有其他的了吗？
+实践是检验真理的唯一标准！
+下面小编用实例来告诉你缺少的部分。
+
 1.非集合类对象
+运行以下代码：
+    NSString *str = @"test string";
+    NSString *strCopy = [str copy];
+    NSString *strMutableCopy = [str mutableCopy];
+    NSLog(@"str = %@, stack point = %p, malloc point = %p", str, &str, str);
+    NSLog(@"strCopy = %@, stack point = %p, malloc point = %p", strCopy, &strCopy, strCopy);
+    NSLog(@"strMutableCopy = %@, stack point = %p, malloc point = %p", strMutableCopy, &strMutableCopy, strMutableCopy);
+
+结果打印：
+    str = test string, stack point = 0x7ffee4626f68, malloc point = 0x10b5dd248
+    strCopy = test string, stack point = 0x7ffee4626f60, malloc point = 0x10b5dd248
+    strMutableCopy = test string, stack point = 0x7ffee4626f58, malloc point = 0x600002a5e130
+    
+结果分析：
+分别查看三个字符串的指针地址和指针指向的地址，可以发现，str、strCopy及strMutableCopy的栈地址都不相同，说明系统声明了3个不同指针指向
+注：0x7表示栈地址，0x6表示堆地址。 
 
 2.集合类对象
 
